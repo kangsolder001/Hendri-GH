@@ -1,8 +1,9 @@
-#define EC_PIN A0
+#define EC_PIN A2
 #define PB_A 5
 #define PB_B 6
 #define buzz 2
-unsigned int prevCalEC;
+unsigned int prevCalEC,prevPBA,Start_PBA;
+bool b1st;
 void setup() {
   Serial.begin(115200);
   pinMode(PB_A, INPUT_PULLUP);
@@ -15,6 +16,9 @@ void loop() {
   int PBA, PBB;
   PBA = rPB(PB_A);
   PBB = rPB(PB_B);
+  //Serial.print("PBA = ");
+  //Serial.println(PBA);
+  
   if (!PBA && Mode != "calEC A")
   {
     if ((millis() - prevPBA > 100) && b1st)
@@ -22,6 +26,7 @@ void loop() {
       if (b1st)
       {
         digitalWrite(buzz, 1);
+        Serial.println("LED ON ");
         b1st = false;
       }
       prevPBA = millis();
@@ -31,6 +36,8 @@ void loop() {
       if (!b1st)
       {
         digitalWrite(buzz, 0);
+        Serial.println("LED OFF");
+        b1st = true;
       }
     }
     if ( millis() - Start_PBA > 3000)
@@ -38,6 +45,7 @@ void loop() {
       Mode = "calEC A";
       Serial.println("calEC A");
       digitalWrite(buzz, 1);
+      Serial.println("LED ON ");
       Start_PBA = millis();
       b1st = true;
 
@@ -85,6 +93,7 @@ void loop() {
     if (b1st && millis() - Start_PBA > 2000)
     {
       digitalWrite(buzz, 0);
+      Serial.println("LED OFF");
     }
     calEC(btsA);
     //    Serial.println(btsA);
