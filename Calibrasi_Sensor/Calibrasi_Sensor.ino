@@ -2,7 +2,7 @@
 #define PB_A 5
 #define PB_B 6
 #define buzz 2
-unsigned int prevCalEC, prevPBA, Start_PBA,Start_PBB;
+unsigned long prevCalEC, prevPBA, Start_PBA, Start_PBB,prevR;
 bool b1st;
 void setup() {
   Serial.begin(115200);
@@ -10,15 +10,26 @@ void setup() {
   pinMode(PB_B, INPUT_PULLUP);
   pinMode(buzz, OUTPUT);
 }
-String Mode;
+String Mode = "doneB";
 int btsA, btsB;
 void loop() {
+  if(millis()-prevR>500)
+  {
+    int in = analogRead(EC_PIN);
+    
+    float nilai = readec(btsA,btsB,in);
+    Serial.print("anIN = ");
+    Serial.println(in);
+    Serial.print("EC = ");
+    Serial.println(nilai);
+    prevR= millis();
+  }
   int PBA, PBB;
   PBA = rPB(PB_A);
   PBB = rPB(PB_B);
   //Serial.print("PBA = ");
   //Serial.println(PBA);
-  if ( PBA &&  Mode != "doneA")
+  if ( PBA &&  Mode == "doneB")
   {
     Start_PBA = millis();
   }
@@ -27,43 +38,45 @@ void loop() {
     Start_PBB = millis();
   }
 
-  else if (!PBA  && Mode != "doneA")
+  else if (!PBA  && Mode == "doneB")
   {
-    if ( millis() - Start_PBA > 3000)
+    if ( millis() - Start_PBA > 1000)
     {
       Mode = "calEC A";
       Serial.println("calEC A");
 
       Start_PBA = millis();
-      for ( int i = 0 ; i < 2 ; i++)
+      for ( int i = 0 ; i < 1 ; i++)
       {
         digitalWrite(buzz, 1);
-        delay(100);
+        delay(500);
         digitalWrite(buzz, 0);
-        delay(100);
+        delay(500);
       }
-      digitalWrite(buzz, 1);
-      Serial.println("LED ON ");
+      //      digitalWrite(buzz, 1);
       b1st = true;
     }
   }
   else if (!PBA  && Mode == "doneA")
   {
-    if ( millis() - Start_PBB > 3000)
+    if ( millis() - Start_PBB > 1000)
     {
       Mode = "calEC B";
       Serial.println("calEC B");
 
       Start_PBB = millis();
-      for ( int i = 0 ; i < 2 ; i++)
+      for ( int i = 0 ; i < 1 ; i++)
       {
         digitalWrite(buzz, 1);
-        delay(100);
+        delay(400);
         digitalWrite(buzz, 0);
-        delay(100);
+        delay(400);
+        digitalWrite(buzz, 1);
+        delay(500);
+        digitalWrite(buzz, 0);
+        delay(500);
       }
-      digitalWrite(buzz, 1);
-      Serial.println("LED ON ");
+      //      digitalWrite(buzz, 1);
       b1st = true;
     }
   }
@@ -71,69 +84,80 @@ void loop() {
 
   if ( Mode == "calEC A")
   {
-    if (b1st && millis() - Start_PBA > 1000)
-    {
-      digitalWrite(buzz, 0);
-      Serial.println("LED OFF");
-      b1st = false;
-    }
+    //    if (b1st && millis() - Start_PBA > 1000)
+    //    {
+    //      digitalWrite(buzz, 0);
+    //      //      Serial.println("LED OFF");
+    //      b1st = false;
+    //    }
     calEC(btsA);
     //    Serial.println(btsA);
     if ( btsA != 0)
     {
       Serial.println("DONE A ");
       Serial.print("bts A = ");
+      digitalWrite(buzz, 0);
       Serial.println(btsA);
-      Mode = "done A";
+      Mode = "doneA";
+      Serial.println(Mode);
+      digitalWrite(buzz, 1);
+      delay(1000);
+      digitalWrite(buzz, 0);
+//      delay(500);
     }
   }
   else if ( Mode == "calEC B")
   {
-    if (b1st && millis() - Start_PBB > 1000)
-    {
-      digitalWrite(buzz, 0);
-      Serial.println("LED OFF");
-      b1st = false;
-    }
+    //    if (b1st && millis() - Start_PBB > 1000)
+    //    {
+    //      digitalWrite(buzz, 0);
+    //      b1st = false;
+    //    }
     calEC(btsB);
     if ( btsB != 0)
     {
       Serial.println("DONE B ");
       Serial.print("bts B = ");
+      Mode = "doneB";
+      digitalWrite(buzz, 0);
       Serial.println(btsB);
+      Serial.println(Mode);
+      digitalWrite(buzz, 1);
+      delay(1000);
+      digitalWrite(buzz, 0);
     }
   }
 
 
-  if ( Serial.available() > 0)
-  {
-    String in = Serial.readStringUntil('\r');
-    if ( in == "1")
-    {
-      Mode = "calEC A";
-      Serial.println("calEC A");
-    }
-    else if ( in == "2")
-    {
-      Mode = "calEC B";
-      Serial.println("calEC B");
-    }
-    else if ( in == "3")
-    {
-      Serial.print("bts A = ");
-      Serial.println(btsA);
-      Serial.print("bts B = ");
-      Serial.println(btsB);
-    }
-    else if ( in == "4")
-    {
-      btsA = 0;
-      btsB = 0;
-    }
-    else
-    {
-      Mode = "";
-    }
-  }
+  //  if ( Serial.available() > 0)
+  //  {
+  //    String in = Serial.readStringUntil('\r');
+  //    if ( in == "1")
+  //    {
+  //      Mode = "calEC A";
+  //      Serial.println("calEC A");
+  //    }
+  //    else if ( in == "2")
+  //    {
+  //      Mode = "calEC B";
+  //      Serial.println("calEC B");
+  //    }
+  //    else if ( in == "3")
+  //    {
+  //      Serial.print("bts A = ");
+  //      Serial.println(btsA);
+  //      Serial.print("bts B = ");
+  //      Serial.println(btsB);
+  //    }
+  //    else if ( in == "4")
+  //    {
+  //      btsA = 0;
+  //      btsB = 0;
+  //    }
+  //    else
+  //    {
+  //      Mode = "";
+  //    }
+  //  }
 
 }

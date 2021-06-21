@@ -30,10 +30,10 @@ int getADC()
   if ( s12 <= 5 && s23 <= 5 && s13 <= 5 )
   {
     count++;
-    Serial.print("Count = ");
-    Serial.println(count);
+//    Serial.print("Count = ");
+//    Serial.println(count);
   }
-  if ( count == 5)
+  if ( count == 10)
   {
     Serial.println("DONE");
     Serial.print("AVE= ");
