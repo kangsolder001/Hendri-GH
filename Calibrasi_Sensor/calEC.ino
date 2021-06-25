@@ -1,16 +1,16 @@
 
-void calEC(int &bts)
+void calEC(int &bts,bool &a)
 {
   if ( millis() - prevCalEC > 20)
   {
-    int adcIN =  getADC();
+    int adcIN =  getADC(a);
     bts = adcIN;
 //    Serial.println(bts);
     prevCalEC = millis();
   }
 
 }
-int getADC()
+int getADC(bool &a)
 {
 
   static int s1, s2, s3, count;
@@ -35,6 +35,7 @@ int getADC()
   }
   if ( count == 10)
   {
+    a=true;
     Serial.println("DONE");
     Serial.print("AVE= ");
     int ave = (s1 + s2 + s3 ) / 3;

@@ -1,8 +1,8 @@
-#define EC_PIN A2
+#define EC_PIN A2 // tetep 0
 #define PB_A 5
 #define PB_B 6
 #define buzz 2
-unsigned long prevCalEC, prevPBA, Start_PBA, Start_PBB,prevR;
+unsigned long prevCalEC, prevPBA, Start_PBA, Start_PBB, prevR;
 bool b1st;
 void setup() {
   Serial.begin(115200);
@@ -12,17 +12,19 @@ void setup() {
 }
 String Mode = "doneB";
 int btsA, btsB;
+bool btsa = false;
+bool btsb = false;
 void loop() {
-  if(millis()-prevR>500)
+  if (millis() - prevR > 500)
   {
     int in = analogRead(EC_PIN);
-    
-    float nilai = readec(btsA,btsB,in);
+
+    float nilai = readec(btsA, btsB, in);
     Serial.print("anIN = ");
     Serial.println(in);
     Serial.print("EC = ");
     Serial.println(nilai);
-    prevR= millis();
+    prevR = millis();
   }
   int PBA, PBB;
   PBA = rPB(PB_A);
@@ -44,7 +46,7 @@ void loop() {
     {
       Mode = "calEC A";
       Serial.println("calEC A");
-
+      btsa = false;
       Start_PBA = millis();
       for ( int i = 0 ; i < 1 ; i++)
       {
@@ -63,7 +65,7 @@ void loop() {
     {
       Mode = "calEC B";
       Serial.println("calEC B");
-
+      btsb = false;
       Start_PBB = millis();
       for ( int i = 0 ; i < 1 ; i++)
       {
@@ -90,9 +92,9 @@ void loop() {
     //      //      Serial.println("LED OFF");
     //      b1st = false;
     //    }
-    calEC(btsA);
+    calEC(btsA, btsa);
     //    Serial.println(btsA);
-    if ( btsA != 0)
+    if (btsa)
     {
       Serial.println("DONE A ");
       Serial.print("bts A = ");
@@ -103,7 +105,7 @@ void loop() {
       digitalWrite(buzz, 1);
       delay(1000);
       digitalWrite(buzz, 0);
-//      delay(500);
+      //      delay(500);
     }
   }
   else if ( Mode == "calEC B")
@@ -113,10 +115,10 @@ void loop() {
     //      digitalWrite(buzz, 0);
     //      b1st = false;
     //    }
-    calEC(btsB);
-    if ( btsB != 0)
+    calEC(btsB, btsb);
+    if (btsb)
     {
-      Serial.println("DONE B ");
+      Serial.println("DONE B");
       Serial.print("bts B = ");
       Mode = "doneB";
       digitalWrite(buzz, 0);
