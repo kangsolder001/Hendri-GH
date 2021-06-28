@@ -92,12 +92,12 @@ void MenuCal(String &Mode)
     if (bphB)
     {
       digitalWrite(buzz, 0);
-      CekDataandSave(phB, 5);
+      CekDataandSave(phB, 13);
       Mode = "PH2";
       buzzDone();
       Serial.println("DONE B");
       Serial.print("bts B = ");
-      Serial.println(ecB);
+      Serial.println(phB);
       Serial.println(Mode);
     }
   }

@@ -25,7 +25,7 @@ int readEEPROM(int address)
   for (int i = address; i <= address + 3; i++)
   {
     int te = EEPROM.read(i);
-    Serial.println(te);
+//    Serial.println(te);
     text += te;
   }
   nilai = text.toInt();

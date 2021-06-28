@@ -21,10 +21,16 @@ void setup() {
   pinMode(buzz, OUTPUT);
   ecA = readEEPROM(1);
   ecB = readEEPROM(5);
-  Serial.print("bts A = ");
+  phA = readEEPROM(9);
+  phB = readEEPROM(13);
+  Serial.print("ec A = ");
   Serial.println(ecA);
-  Serial.print("bts B = ");
+  Serial.print("ec B = ");
   Serial.println(ecB);
+  Serial.print("ph A = ");
+  Serial.println(phA);
+  Serial.print("ph B = ");
+  Serial.println(phB);
 }
 
 void loop()
@@ -35,10 +41,15 @@ void loop()
     float nilai = readec(ecA, ecB, in);
     int a = analogRead(PH_PIN);
     float phVal = readph(phA, phB, a);
+    Serial.print("anPH = ");
+    Serial.println(a);
+    Serial.print("PH = ");
+    Serial.println(phVal);
     Serial.print("anIN = ");
     Serial.println(in);
     Serial.print("EC = ");
     Serial.println(nilai);
+    Serial.println("===============================");
     prevR = millis();
   }
   ReadPB(ModeEC);
