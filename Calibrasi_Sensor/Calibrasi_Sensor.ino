@@ -1,7 +1,13 @@
+#include <EEPROM.h>
+
 #define EC_PIN A2 // tetep 0
 #define PB_A 5
 #define PB_B 6
 #define buzz 2
+String Mode = "doneB";
+int btsA, btsB;
+bool btsa = false;
+bool btsb = false;
 unsigned long prevCalEC, prevPBA, Start_PBA, Start_PBB, prevR;
 bool b1st;
 void setup() {
@@ -9,16 +15,15 @@ void setup() {
   pinMode(PB_A, INPUT_PULLUP);
   pinMode(PB_B, INPUT_PULLUP);
   pinMode(buzz, OUTPUT);
+  btsA = readEEPROM(1);
+  btsB = readEEPROM(5);
 }
-String Mode = "doneB";
-int btsA, btsB;
-bool btsa = false;
-bool btsb = false;
-void loop() {
+
+void loop() 
+{
   if (millis() - prevR > 500)
   {
     int in = analogRead(EC_PIN);
-
     float nilai = readec(btsA, btsB, in);
     Serial.print("anIN = ");
     Serial.println(in);
@@ -100,6 +105,7 @@ void loop() {
       Serial.print("bts A = ");
       digitalWrite(buzz, 0);
       Serial.println(btsA);
+      CekDataandSave(btsA,1);
       Mode = "doneA";
       Serial.println(Mode);
       digitalWrite(buzz, 1);
@@ -123,6 +129,7 @@ void loop() {
       Mode = "doneB";
       digitalWrite(buzz, 0);
       Serial.println(btsB);
+      CekDataandSave(btsB,5);
       Serial.println(Mode);
       digitalWrite(buzz, 1);
       delay(1000);
