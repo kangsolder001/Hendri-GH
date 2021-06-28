@@ -9,22 +9,23 @@ void CekDataandSave(int val, int address)
   n[3] = s2 / 10;
   s4 = s2 % 10;
   n[4] = s4 / 1;
-
-  for (int i = address; i <= address + 4; i++)
+  int x = 1;
+  for (int i = address; i <= address + 3; i++)
   {
-    EEPROM.write(i, n[i]);
+    EEPROM.write(i, n[x]);
     Serial.print("n" + String(i));
-    Serial.println(n[i]);
+    Serial.println(n[x]);
+    x++;
   }
 }
 int readEEPROM(int address)
 {
   String text;
   int nilai;
-  for (int i = address; i <= address + 4; i++)
+  for (int i = address; i <= address + 3; i++)
   {
     int te = EEPROM.read(i);
-    Serial.print(te);
+//    Serial.print(te);
     text += te;
   }
   nilai = text.toInt();

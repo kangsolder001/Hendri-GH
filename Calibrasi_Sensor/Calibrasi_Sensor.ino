@@ -17,6 +17,10 @@ void setup() {
   pinMode(buzz, OUTPUT);
   btsA = readEEPROM(1);
   btsB = readEEPROM(5);
+  Serial.print("bts A = ");
+  Serial.println(btsA);
+  Serial.print("bts B = ");
+  Serial.println(btsB);
 }
 
 void loop() 
