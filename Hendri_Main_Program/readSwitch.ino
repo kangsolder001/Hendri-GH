@@ -3,44 +3,17 @@ int readSwitch(int pin)
   int in = digitalRead(pin);
   return in;
 }
-void readAllSensor()
-{
-  float ecVal = ecRead();
-  float phVal = phRead();
-  float tempVal = tempRead();
-  float humVal = humRead();
-}
 
-float ecRead()
+float ecRead(int btsA, int btsB, int anIN)
 {
-  float ecValue, voltage;
-  float temperature = 25;
-  voltage = analogRead(EC_PIN) / 1024.0 * 5000;
-  //Serial.print("voltage:");
-  //Serial.print(voltage);
-  ecValue =  ec.readEC(voltage, temperature);
-  return ecValue;
+  float out = ((anIN * 12.8) - (btsA * 12.8)) / (btsB - btsA);
+  out = out*1000/2;
+  return out;
 }
-float phRead()
+float phRead(int btsA, int btsB, int anIN)
 {
-  static unsigned long samplingTime = millis();
-  static unsigned long printTime = millis();
-  static float Offset = 0.00;
-  static int samplingInterval = 20;
-  static int pHArrayIndex;
-  static float pHValue, voltage;
-  if (millis() - samplingTime > samplingInterval)
-  {
-    pHArray[pHArrayIndex++] = analogRead(phPin);
-    if (pHArrayIndex == ArrayLenth)
-    {
-      pHArrayIndex = 0;
-      voltage = avergearray(pHArray, ArrayLenth) * 5.0 / 1024;
-      pHValue = 3.5 * voltage + Offset;
-    }
-    samplingTime = millis();
-  }
-  return pHValue;
+  float out = (((anIN * 5.17) - (btsA * 5.17)) / (btsB - btsA)) + 4.01;
+  return out;
 }
 float tempRead()
 {
@@ -58,7 +31,8 @@ float humRead()
 float uvRead()
 {
   float uv;
-  uv = random(0, 10);
+  uv = lux.readLightLevel();
+  return uv;
 }
 
 

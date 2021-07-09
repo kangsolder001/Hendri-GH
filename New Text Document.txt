@@ -1,0 +1,4 @@
+1. Rangkaian Aktuator 4 sekaligus ke arduino belum bisa 
+2. Trigger Aktuator
+2. Program UV
+3. Set Point + main program + kalibrasi (1 1 trus digabung)

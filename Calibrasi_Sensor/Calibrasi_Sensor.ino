@@ -1,10 +1,10 @@
 #include <EEPROM.h>
 
-#define EC_PIN A2 // tetep 0
+#define EC_PIN A3 // tetep 0
 #define PH_PIN A4
 #define PB_A 5
 #define PB_B 6
-#define buzz 2
+#define buzz 7
 String ModeEC = "EC2";
 String ModePH = "PH2";
 int ecA, ecB, phA, phB;

@@ -2,19 +2,47 @@
 #include "DFRobot_EC10.h"
 #include <EEPROM.h>
 #include <SoftwareSerial.h>
+#include <Wire.h>
+#include <BH1750.h>
+//================Actuator===================
+float ph_a,ph_b;
+float ec_a,ec_b;
+float temp_a,temp_b;
+float hum_a,hum_b;
+float lux_a;
+   
+//===============Calibration==================
+#define PB_A 5
+#define PB_B 6
+#define buzz 7
+
+String ModeEC = "EC2";
+String ModePH = "PH2";
+int ecA, ecB, phA, phB;
+bool becA = false;
+bool becB = false;
+bool bphA = false;
+bool bphB = false;
+unsigned long prevCalEC, prevPBA, Start_PBA1, Start_PBA2, Start_PBB1, Start_PBB2;
+bool b1st;
+//===============LUX==================
+BH1750 lux;
+// SDA = A4;
+// SCL = A5;
+// ADD = GND;
+// VCC = 3V
+// GND = GND
 //===============EC==================
 DFRobot_EC10 ec;
 #define EC_PIN A3
 //=============PH====================
-#define phPin A1
-const int ArrayLenth = 40;
-int pHArray[ArrayLenth];
+#define PH_PIN A2
 //==============DHT==================
-#define DHTPIN 7
+#define DHTPIN 2
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHTTYPE);
 //===============MCU ================
-SoftwareSerial MCU(4,3); //rx,tx
+SoftwareSerial MCU(4, 3); //rx,tx
 //============Switch Sensor==========
 int PB[] = {8, 9, 10, 11};
 bool PBin[5];
@@ -32,13 +60,23 @@ void setup()
   {
     pinMode(PB[i], INPUT);
   }
+  Wire.begin();
   dht.begin();
+  lux.begin();
   ec.begin();
+
+  pinMode(PB_A, INPUT_PULLUP);
+  pinMode(PB_B, INPUT_PULLUP);
+  pinMode(buzz, OUTPUT);
+  ecA = readEEPROM(1);
+  ecB = readEEPROM(5);
+  phA = readEEPROM(9);
+  phB = readEEPROM(13);
   Serial.println("Program Siap ");
 }
 
 void loop() {
-  readAllSensor();
+  readCal();
   reciveDataMCU();
   if ( millis() - prevReadSwitch > 100)
   {
@@ -56,7 +94,7 @@ void loop() {
       }
     }
   }
-  if (millis() - prevReadSensor >= 1000) // 1000 artinya 1 detik 
+  if (millis() - prevReadSensor >= 1000) // 1000 artinya 1 detik
   {
     readSensor(PBin[0], PBin[1], PBin[2], PBin[3], hum , temp, EC , ph, uv);
     Serial.println("===========================================================");

@@ -24,6 +24,7 @@ void reciveDataMCU()
   {
     int ind1, ind2, ind3, ind4, ind5, ind6, ind7, ind8, ind9, ind10;
     String data1, data2, data3, data4, data5, data6, data7, data8, data9;
+    //    sendDataArd(ph_a, ph_b, ppm_a, ppm_b, suhu_a, suhu_b, kel_a, kel_b, cahaya);
     String req = MCU.readStringUntil('\r');
     Serial.println(req);
     req.toLowerCase();
@@ -48,9 +49,22 @@ void reciveDataMCU()
       data6 = req.substring(ind6 + 1, ind7);// suhu batas atas
       data7 = req.substring(ind7 + 1, ind8);// kel batas bawah
       data8 = req.substring(ind8 + 1, ind9); // kel batas atas
-      data9 = req.substring(ind8 + 1, ind9); // Cahaya 
-      
-
+      data9 = req.substring(ind8 + 1, ind9); // Cahaya
+      ph_a = toF(data1);
+      ph_b = toF(data2);
+      ec_a = toF(data3);
+      ec_b = toF(data4);
+      temp_a = toF(data5);
+      temp_b = toF(data6);
+      hum_a = toF(data7);
+      hum_b = toF(data8);
+      lux_a = toF(data9);
     }
   }
+}
+
+float toF(String in )
+{
+  float F = in.toFloat();
+  return F;
 }

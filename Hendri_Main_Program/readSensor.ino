@@ -6,7 +6,8 @@ float readSensor(bool sens1, bool sens2, bool sens3, bool sens4, float &hum, flo
   {
 
     phStat = "ON";
-    ph = phRead();
+    int anIn= analogRead(PH_PIN);
+    ph = phRead(phA, phB, anIn);
   }
   else
   {
@@ -15,7 +16,9 @@ float readSensor(bool sens1, bool sens2, bool sens3, bool sens4, float &hum, flo
   }
   if ( sens2)
   {
-    EC = ecRead();
+    
+    int anIn= analogRead(EC_PIN);
+    EC = ecRead(ecA, ecB, anIn);
     ecStat = "ON";
   }
   else
