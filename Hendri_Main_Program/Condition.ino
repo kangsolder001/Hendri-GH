@@ -20,7 +20,7 @@ bool Condition_ph(float ph, float ph_a, float ph_b, bool b_ph)
       // on ph down
       start_ph = millis();
       pumpON(p_phdown);
-      Serial.println("pump pH Dwon ON");
+      Serial.println("pump pH Down ON");
       Serial.println(millis());
       b_ph = false;
     }
@@ -31,6 +31,7 @@ bool Condition_ph(float ph, float ph_a, float ph_b, bool b_ph)
   }
   return b_ph;
 }
+
 bool Condition_ec(float ec, float ec_a, bool b_ec)
 {
   if (b_ec)
