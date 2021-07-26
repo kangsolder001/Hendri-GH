@@ -1,4 +1,22 @@
+void Condition(bool b_data)
+{
+  if ( b_data)
+  {
+    if ( millis() - delay_cond_ec > interval_cond_ec && b_ec)
+    {
+      //    delay_cond_ec = millis() - interval_cond_ec * 0.1;
+      b_ec = Condition_ec(EC, ec_a, b_ec);
+    }
+    if ( millis() - delay_cond_ph > interval_cond_ph && b_ph)
+    {
+      //    delay_cond_ph = millis() - interval_cond_ph * 0.1;
+      b_ph = Condition_ph(ph, ph_a, ph_b, b_ph);
+    }
 
+    b_ec = OFFPUMPEC(start_ec, b_ec, interval_ec);
+    b_ph = OFFPUMPPH(start_ph, b_ph, interval_ph);
+  }
+}
 
 
 

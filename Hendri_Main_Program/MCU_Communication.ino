@@ -53,12 +53,15 @@ void reciveDataMCU()
       ph_a = toF(data1);
       ph_b = toF(data2);
       ec_a = toF(data3);
+//            ec_a =  ec_a * 2 / 1000; // dari ppm ke EC
       ec_b = toF(data4);
+//            ec_b =  ec_b * 2 / 1000; // dari ppm ke EC
       temp_a = toF(data5);
       temp_b = toF(data6);
       hum_a = toF(data7);
       hum_b = toF(data8);
       lux_a = toF(data9);
+      b_data = true;
     }
   }
 }

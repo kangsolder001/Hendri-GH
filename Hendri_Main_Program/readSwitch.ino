@@ -7,7 +7,7 @@ int readSwitch(int pin)
 float ecRead(int btsA, int btsB, int anIN)
 {
   float out = ((anIN * 12.8) - (btsA * 12.8)) / (btsB - btsA);
-  out = out*1000/2;
+  //  out = out*1000/2;
   return out;
 }
 float phRead(int btsA, int btsB, int anIN)

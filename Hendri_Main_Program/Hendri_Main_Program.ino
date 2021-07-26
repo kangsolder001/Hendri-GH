@@ -10,6 +10,7 @@
 #define p_ecA A0
 #define p_ecB A1
 
+bool b_data = false;
 float ph_a, ph_b;
 float ec_a, ec_b;
 float temp_a, temp_b;
@@ -125,19 +126,8 @@ void loop() {
     sendDataMCU(String(EC), String (ph), String (temp), String (hum), String (uv));
 
   }
-  if ( millis() - delay_cond_ec > interval_cond_ec && b_ec)
-  {
-    //    delay_cond_ec = millis() - interval_cond_ec * 0.1;
-    b_ec = Condition_ec(EC, ec_a, b_ec);
-  }
-  if ( millis() - delay_cond_ph > interval_cond_ph && b_ph)
-  {
-    //    delay_cond_ph = millis() - interval_cond_ph * 0.1;
-    b_ph = Condition_ph(ph, ph_a, ph_b, b_ph);
-  }
 
-  b_ec = OFFPUMPEC(start_ec, b_ec, interval_ec);
-  b_ph = OFFPUMPPH(start_ph, b_ph, interval_ph);
+  Condition(b_data);
 
 
 
