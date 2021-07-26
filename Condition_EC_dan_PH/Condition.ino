@@ -1,7 +1,3 @@
-
-
-
-
 bool Condition_ph(float ph, float ph_a, float ph_b, bool b_ph)
 {
   if (b_ph)

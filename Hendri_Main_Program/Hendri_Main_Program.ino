@@ -5,12 +5,24 @@
 #include <Wire.h>
 #include <BH1750.h>
 //================Actuator===================
-float ph_a,ph_b;
-float ec_a,ec_b;
-float temp_a,temp_b;
-float hum_a,hum_b;
+#define p_phup 12
+#define p_phdown 13
+#define p_ecA A0
+#define p_ecB A1
+
+float ph_a, ph_b;
+float ec_a, ec_b;
+float temp_a, temp_b;
+float hum_a, hum_b;
 float lux_a;
-   
+
+bool b_ph, b_ec;
+unsigned long start_ph, start_ec,  delay_cond_ph, delay_cond_ec;
+int interval_ph = 3000; // 0.5 ph = 100 ml  , 100 ml = 3000 ms,
+int interval_ec = 3000;
+unsigned long interval_cond_ec = 5000;
+unsigned long interval_cond_ph = 5000;
+
 //===============Calibration==================
 #define PB_A 5
 #define PB_B 6
@@ -55,6 +67,12 @@ void setup()
 {
   Serial.begin(115200);
   MCU.begin(9600);
+
+  pinMode(p_phup, OUTPUT);
+  pinMode(p_phdown, OUTPUT);
+  pinMode(p_ecA, OUTPUT);
+  pinMode(p_ecA, OUTPUT);
+
   Serial.println("Inisialisasi Program ...............");
   for (int i = 0 ; i <= 4; i++)
   {
@@ -94,6 +112,7 @@ void loop() {
       }
     }
   }
+
   if (millis() - prevReadSensor >= 1000) // 1000 artinya 1 detik
   {
     readSensor(PBin[0], PBin[1], PBin[2], PBin[3], hum , temp, EC , ph, uv);
@@ -102,8 +121,20 @@ void loop() {
     sendDataMCU(String(EC), String (ph), String (temp), String (hum), String (uv));
 
   }
+  if ( millis() - delay_cond_ec > interval_cond_ec && b_ec)
+  {
+    //    delay_cond_ec = millis() - interval_cond_ec * 0.1;
+    b_ec = Condition_ec(EC, ec_a, b_ec);
+  }
+  if ( millis() - delay_cond_ph > interval_cond_ph && b_ph)
+  {
+    //    delay_cond_ph = millis() - interval_cond_ph * 0.1;
+    b_ph = Condition_ph(ph, ph_a, ph_b, b_ph);
+  }
 
-  //  delay(1000);
+  b_ec = OFFPUMPEC(start_ec, b_ec, interval_ec);
+  b_ph = OFFPUMPPH(start_ph, b_ph, interval_ph);
+
 
 
 }
