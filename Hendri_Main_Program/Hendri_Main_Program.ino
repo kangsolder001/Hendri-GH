@@ -71,7 +71,11 @@ void setup()
   pinMode(p_phup, OUTPUT);
   pinMode(p_phdown, OUTPUT);
   pinMode(p_ecA, OUTPUT);
-  pinMode(p_ecA, OUTPUT);
+  pinMode(p_ecB, OUTPUT);
+  pumpOFF(p_phup);
+  pumpOFF(p_phdown);
+  pumpOFF(p_ecA);
+  pumpOFF(p_ecB);
 
   Serial.println("Inisialisasi Program ...............");
   for (int i = 0 ; i <= 4; i++)
